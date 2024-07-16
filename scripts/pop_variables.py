@@ -46,18 +46,6 @@ def old_age_dependency_ratio(df: pd.DataFrame, for_each: str = "BGY_PSGC", age: 
     return round(count_old_age / count_working_age * 100, places)
 
 
-# def school_population(df: pd.DataFrame, for_each: str = "BGY_PSGC", age: str = "P5") -> pd.Series:
-#     is_school_age: pd.Series = df[age].between(5, 24, "both")
-
-#     return count_per_barangay(df, for_each=for_each, col_to_count=age, condition=is_school_age)
-
-
-# def after_school_population(df: pd.DataFrame, for_each: str = "BGY_PSGC", age: str = "P5") -> pd.Series:
-#     is_after_school_age: pd.Series = df[age] > 24
-
-#     return count_per_barangay(df, for_each=for_each, col_to_count=age, condition=is_after_school_age)
-
-
 def school_attendance_rate(df: pd.DataFrame, for_each: str = "BGY_PSGC", age: str = "P5", attendance: str = "P10", places: int = 3) -> pd.Series:
     is_attending_school: pd.Series = df[attendance] == 1
     is_school_age: pd.Series = df[age].between(5, 24, "both")
@@ -78,6 +66,7 @@ def literacy_rate(df: pd.DataFrame, for_each: str = "BGY_PSGC", age: str = "P5",
 
 def attainment_to_years(attainment: 'pd.Series[int]', min_code: int, years_before: int) -> pd.Series:
     return (attainment - min_code) / 10 + years_before
+
 
 def mean_years_schooling(df: pd.DataFrame, for_each: str = "BGY_PSGC", age: str = "P5", attainment: str = "P12", places: int = 3) -> pd.Series:
     is_graduate_age: pd.Series = df[age] > 24
