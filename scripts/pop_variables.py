@@ -7,8 +7,10 @@ def population(df: pd.DataFrame, for_each: str = "BGY_PSGC", col_to_count: str =
 
 
 def sex_ratio(df: pd.DataFrame, for_each: str = "BGY_PSGC", sex: str = "P3", places: int = 3) -> pd.Series:
-    count_males: pd.Series = df[df[sex] == 1].groupby(for_each)[sex].count()
-    count_females: pd.Series = df[df[sex] == 1].groupby(for_each)[sex].count()
+    is_male = df[sex] == 1
+    is_female = df[sex] == 2
+    count_males: pd.Series = df[is_male].groupby(for_each)[sex].count()
+    count_females: pd.Series = df[is_female].groupby(for_each)[sex].count()
 
     return round(count_males / count_females * 100, places)
 
