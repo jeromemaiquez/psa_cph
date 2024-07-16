@@ -39,7 +39,7 @@ def youth_dependency_ratio(df: pd.DataFrame, for_each: str = "BGY_PSGC", age: st
 
 
 def old_age_dependency_ratio(df: pd.DataFrame, for_each: str = "BGY_PSGC", age: str = "P5", places: int = 3) -> pd.Series:
-    is_old_age: pd.Series = df[age] < 15
+    is_old_age: pd.Series = df[age] > 64
     count_old_age: pd.Series = count_per_barangay(df, for_each=for_each, col_to_count=age, condition=is_old_age)
     count_working_age: pd.Series = working_age_population(df, for_each=for_each, age=age)
     
@@ -67,7 +67,7 @@ def school_attendance_rate(df: pd.DataFrame, for_each: str = "BGY_PSGC", age: st
     return round(count_attending_school / count_school_age * 100, places)
 
 
-def adult_literacy_rate(df: pd.DataFrame, for_each: str = "BGY_PSGC", age: str = "P5", literacy: str = "P11", places: int = 3) -> pd.Series:
+def literacy_rate(df: pd.DataFrame, for_each: str = "BGY_PSGC", age: str = "P5", literacy: str = "P11", places: int = 3) -> pd.Series:
     is_literate: pd.Series = df[literacy] == 1
     is_reading_age: pd.Series = df[age] > 4
     count_literate: pd.Series = count_per_barangay(df, for_each=for_each, col_to_count=age, condition=is_literate & is_reading_age)
@@ -83,7 +83,7 @@ def mean_years_schooling(df: pd.DataFrame, for_each: str = "BGY_PSGC", age: str 
 
 def ofw_per_1k_people(df: pd.DataFrame, for_each: str = "BGY_PSGC", ofw: str = "P15", col_to_count: str = "P2", places: int = 3) -> pd.Series:
     is_ofw: pd.Series = df[ofw] == 1
-    count_ofw: pd.Series = df[is_ofw].groupby(for_each)[ofw].count()
+    count_ofw: pd.Series = count_per_barangay(df, for_each=for_each, col_to_count=ofw, condition=is_ofw)
     count_pop: pd.Series = population(df, for_each=for_each, col_to_count=col_to_count)
 
     return round(count_ofw / count_pop * 1_000, places)
