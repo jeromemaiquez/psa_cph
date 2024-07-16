@@ -76,9 +76,42 @@ def literacy_rate(df: pd.DataFrame, for_each: str = "BGY_PSGC", age: str = "P5",
     return round(count_literate / count_reading_age * 100, places)
 
 
+def attainment_to_years(attainment: 'pd.Series[int]', min_code: int, years_before: int) -> pd.Series:
+    return (attainment - min_code) / 10 + years_before
+
 def mean_years_schooling(df: pd.DataFrame, for_each: str = "BGY_PSGC", age: str = "P5", attainment: str = "P12", places: int = 3) -> pd.Series:
     is_graduate_age: pd.Series = df[age] > 24
-    ...
+    count_graduate_age: pd.Series = count_per_barangay(df, for_each=for_each, col_to_count=age, condition=is_graduate_age)
+
+    set_year_per_attainment: dict = {
+        "preschool": [df[attainment] == 10, 1],
+        "special_education": [df[attainment] == 190, 11],
+        "post_secondary": [df[attainment].between(250, 700, "right"), 11],
+        "post_tertiary": [df[attainment].between(750, 999, "neither"), 15],
+    }
+
+    total_years_schooling = pd.Series(0, index=count_graduate_age.index, dtype=np.float64)
+
+    for level in set_year_per_attainment:
+        count_level: pd.Series = count_per_barangay(df, for_each=for_each, col_to_count=age, condition=set_year_per_attainment[level][0] & is_graduate_age)
+        total_years_at_level: pd.Series = count_level * set_year_per_attainment[level][1]
+        total_years_schooling = total_years_schooling.add(total_years_at_level, fill_value=0)
+
+    # primary, secondary, tertiary
+    pst: dict = {
+        "primary": [110, 170, 1],
+        "secondary": [210, 250, 7],
+        "tertiary": [710, 750, 11],
+    }
+
+    for level in pst:
+        is_graduate_age_psgc: pd.Series = df.set_index(for_each)[age] > 24
+        is_in_level = df.set_index(for_each)[attainment].between(pst[level][0], pst[level][1], "both")
+        years_per_level: pd.Series = attainment_to_years(df.set_index(for_each).loc[is_in_level & is_graduate_age_psgc, attainment], min_code=pst[level][0], years_before=pst[level][2])
+        total_years_per_level: pd.Series = years_per_level.groupby(for_each).sum()
+        total_years_schooling = total_years_schooling.add(total_years_per_level, fill_value=0)
+    
+    return round(total_years_schooling / count_graduate_age, places)
 
 
 def ofw_per_1k_people(df: pd.DataFrame, for_each: str = "BGY_PSGC", ofw: str = "P15", col_to_count: str = "P2", places: int = 3) -> pd.Series:
