@@ -64,7 +64,7 @@ def literacy_rate(df: pd.DataFrame, for_each: str = "BGY_PSGC", age: str = "P5",
     return round(count_literate / count_reading_age * 100, places)
 
 
-def attainment_to_years(attainment: 'pd.Series[int]', min_code: int, years_before: int) -> pd.Series:
+def __attainment_to_years__(attainment: 'pd.Series[int]', min_code: int, years_before: int) -> pd.Series:
     return (attainment - min_code) / 10 + years_before
 
 
@@ -96,7 +96,7 @@ def mean_years_schooling(df: pd.DataFrame, for_each: str = "BGY_PSGC", age: str 
     for level in pst:
         is_graduate_age_psgc: pd.Series = df.set_index(for_each)[age] > 24
         is_in_level = df.set_index(for_each)[attainment].between(pst[level][0], pst[level][1], "both")
-        years_per_level: pd.Series = attainment_to_years(df.set_index(for_each).loc[is_in_level & is_graduate_age_psgc, attainment], min_code=pst[level][0], years_before=pst[level][2])
+        years_per_level: pd.Series = __attainment_to_years__(df.set_index(for_each).loc[is_in_level & is_graduate_age_psgc, attainment], min_code=pst[level][0], years_before=pst[level][2])
         total_years_per_level: pd.Series = years_per_level.groupby(for_each).sum()
         total_years_schooling = total_years_schooling.add(total_years_per_level, fill_value=0)
     
