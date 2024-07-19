@@ -33,3 +33,8 @@ See `VARIABLES.md`
 - `.gitignore\`
 - `README.md`
 - `VARIABLES.md`
+
+#### Ways Forward
+- Calculate variables for household characteristics
+- Explore: counts before percentages, then create contingency table?
+- Create script to loop through all folders

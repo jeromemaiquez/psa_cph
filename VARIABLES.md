@@ -17,9 +17,13 @@
     - Percent Single House (pcBT1): `B1==1 / nHH`<sup>1</sup>
     - Percent Duplex (pcBT2): `B1==2 / nHH`<sup>1</sup>
     - Percent Multi-unit Residential (pcBTM): `B1==3 / nHH`<sup>1</sup>
-    - Percent Commercial/Industrial/Agricultural (Office, Factory, etc) (pcBTC): `B1==4 / nHH`<sup>1</sup>
-    - Percent Institutional Living Quarter (pcILQ): `B1==5 / nHH`<sup>1</sup>
-    - Percent Other Housing Units (pcOHU): `B1==6 / nHH`<sup>1</sup>
+        - Apartment/Accessoria/Row House (*CPH 2020*)
+        - Condominium/Condotel (*CPH 2020*)
+        - Other Multi-unit Residential (*CPH 2020*)
+    - Percent Others (pcBTO): `B1 isin(4, 5, 6)`
+        - Commercial/Industrial/Agricultural (Office, Factory, etc): `B1==4 / nHH`<sup>1</sup>
+        - Institutional Living Quarter: `B1==5 / nHH`<sup>1</sup>
+        - Other Housing Units: `B1==6 / nHH`<sup>1</sup>
 - Construction Material of Roof (Strong vs Lightweight):
     - Percent Strong Material (pcRMS): `B2<=3 / nHH`<sup>1</sup>
         - Galvanized Iron/Aluminum: `B2==1`
@@ -46,26 +50,49 @@
         - Others: `B3==10`
         - None: `B3==11`
 - Source of Drinking Water Supply (Safe vs. Unsafe, Level III or II):
-    - Percent Safe Source (pcDWS): `H2 isin(1, 2, 3, 4, 5, 11) / nHH`
-        - Percent Level III (pcDW3): `H2 isin(1, 3)`
+    - Percent Safe Source (pcDWS): `H2 isin(1, 2, 3, 4, 5, 11) / nHH`<sup>2</sup>
+        - Percent Level III (pcDW3): `H2 isin(1, 3)`<sup>2</sup>
             - Own Faucet, Community Water System: `H2==1`
             - Own Tube/Piped Deep Well: `H2==3`
-        - Percent Level II (pcDW2): `H2 isin(2, 4, 5)`
+        - Percent Level II (pcDW2): `H2 isin(2, 4, 5)`<sup>2</sup>
             - Shared Faucet, Community Water System: `H2==2`
             - Shared Tube/Piped Deep Well: `H2==4`
             - Piped Shallow Well: `H2==5`
-        - Percent Safe Private (*in future*)
+        - Percent Safe Private (*CPH 2020*)
             - Bottled Water: `H2==11` (*currently included on its own*)
-            - Water Refilling Station (*for CPH 2020*)
-    - Percent Unsafe Source (pcDW1): `H2 not isin(1, 2, 3, 4, 5, 11) / nHH`
+            - Water Refilling Station (*CPH 2020*)
+    - Percent Unsafe Source (pcDW1): `H2 not isin(1, 2, 3, 4, 5, 11) / nHH`<sup>2</sup>
         - Dug Well: `H2==6`
         - Protected Spring: `H2==7`
         - Unprotected Spring: `H2==8`
-        - Lake/River/Rain: `H2==10`
+        - Lake/River/Rain: `H2==9`
+        - Peddler: `H3==10`
         - Others: `H2==12`
 - Source of Cooking Water Supply (same as above)
-    - Percent Safe Source (pcDWS): `H3 isin(1, 2, 3, 4, 5, 11) / nHH`
-        - Percent Level III (pcDW3): `H2 isin(1, 3)`
-        - Percent Level II (pcDW2): `H2 isin(2, 4, 5)`
-        - Percent Safe Private (*in future*)
-    - Percent Unsafe Source (pcDW1): `H3 not isin(1, 2, 3, 4, 5, 11) / nHH`
+    - Percent Safe Source (pcCWS): `H3 isin(1, 2, 3, 4, 5, 11) / nHH`<sup>2</sup>
+        - Percent Level III (pcCW3): `H2 isin(1, 3)`<sup>2</sup>
+        - Percent Level II (pcCW2): `H2 isin(2, 4, 5)`<sup>2</sup>
+        - Percent Safe Private (*CPH 2020*)
+    - Percent Unsafe Source (pcDW1): `H3 not isin(1, 2, 3, 4, 5, 11) / nHH`<sup>2</sup>
+- Fuel for Lighting
+    - Percent Electric (pcFLE): `H1==1 / nHH`<sup>1</sup>
+    - Percent Solar (pcFLS): `H1 isin(5, 6) / nHH`<sup>1</sup>
+    - Percent Fossil Fuel (pcFLF): `H1 isin(2, 3, 4, 7)`<sup>1</sup>
+    - Percent None (pcFLn): `H1==0`<sup>1</sup>
+- Tenure Status of Housing Unit and Lot
+    - Percent Own or Owner-like Possession of House and Lot (pcHLO): `H4==1 / nHH`<sup>1</sup>
+    - Percent Rent House/Room and/or Lot (pcHLR): `H4 isin(2, 3)`<sup>1</sup>
+        - Rent House/Room, including Lot: `H4==2`
+        - Own House, Rent Lot: `H4==3`
+    - Percent Rent-Free House and/or Lot, with Consent of Owner (pcHLC): `H4 isin(4, 6)`<sup>1</sup>
+        - Own House, Rent-Free Lot with Consent of Owner: `H4==4`
+        - Rent-Free House and Lot with Consent of Owner: `H4==6`
+    - Percent Rent-Free House and/or Lot, without Consent of Owner (pcHLN): `H4 isin(5, 7)`<sup>1</sup>
+        - Own House, Rent-Free Lot without Consent of Owner: `H4==5`
+        - Rent-Free House and Lot without Consent of Owner: `H4==7`
+- Fuel for Cooking (*CPH 2020*)
+- Other Variables (*CPH 2020*)
+
+###### <sup>1</sup> do not include `X==9 (not reported)`
+###### <sup>2</sup> do not include `X==99 (not reported)`
+###### <sup>3</sup> disaggregate by sex `P3==1 vs P3==2`
