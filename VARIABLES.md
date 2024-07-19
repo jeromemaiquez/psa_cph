@@ -1,0 +1,71 @@
+### Relevant Variables from CPH
+
+1. Population Characteristics
+    - Population (nPOP): `groupby(['REG', 'PRV', 'MUN', 'BGY'])['P2'].count()`
+    - Sex Ratio (rSX): `P3==1 (male) / P3==2 (female) * 100`
+    - Working Age Population (nPWA): `sum(P5>=15 AND P<65)`
+    - Youth Dependency Ratio (rYD): `P5<15 / (P5>=15 AND P<65) * 100`
+    - Old-Age Dependency Ratio (rOD): `P5>65 / (P5>=15 AND P<65) * 100`
+    - Total Age Dependency Ratio (rAD): `YDR + ODR`
+    - School Attendance Rate (rSA): `P10==1 / nPOP` only for ages 5-24<sup>1</sup> <sup>3</sup>
+    - Literacy Rate (rLT): `P11==1 / nPOP`<sup>1</sup> <sup>3</sup>
+    - Mean Years of Schooling (mYS): see this [2013 UNESCO document](https://uis.unesco.org/sites/default/files/documents/uis-methodology-for-estimation-of-mean-years-of-schooling-2013-en_0.pdf) for the formula <sup>3</sup>
+    - Overseas Workers per 1,000 People (ptOFW): `P15==1 / nPOP * 1_000`
+2. Housing Characteristics
+- Number of Households (nHH): `groupby(['REG', 'PRV', 'MUN', 'BGY'])['HSN'].count()`
+- Building Type:
+    - Percent Single House (pcBT1): `B1==1 / nHH`<sup>1</sup>
+    - Percent Duplex (pcBT2): `B1==2 / nHH`<sup>1</sup>
+    - Percent Multi-unit Residential (pcBTM): `B1==3 / nHH`<sup>1</sup>
+    - Percent Commercial/Industrial/Agricultural (Office, Factory, etc) (pcBTC): `B1==4 / nHH`<sup>1</sup>
+    - Percent Institutional Living Quarter (pcILQ): `B1==5 / nHH`<sup>1</sup>
+    - Percent Other Housing Units (pcOHU): `B1==6 / nHH`<sup>1</sup>
+- Construction Material of Roof (Strong vs Lightweight):
+    - Percent Strong Material (pcRMS): `B2<=3 / nHH`<sup>1</sup>
+        - Galvanized Iron/Aluminum: `B2==1`
+        - Concrete/Clay Tile: `B2==2`
+        - Half Galvanized Iron and Half Concrete: `B2==3`
+    - Percent Lightweight Material (pcRML): `B2 between (4, 8, "both) / nHH`<sup>1</sup>
+        - Wood/Bamboo: `B2==4`
+        - Cogon/Nipa/Anahaw: `B2==5`
+        - Asbestos: `B2==6`
+        - Makeshift/Salvaged/Improvised Materials: `B2==7`
+        - Trapal: `B2==8`
+        - Others: `B2==9`
+- Construction Material of Outer Walls (Strong vs Lightweight):
+    - Percent Strong Material (pcOWS): `B3 isin(1, 3, 4, 7) / nHH`<sup>1</sup>
+        - Concrete/Brick/Stone: `B3==1`
+        - Half Concrete/Brick/Stone and Half Wood: `B3==3`
+        - Galvanized Iron/Aluminum: `B3==4`
+        - Glass: `B3==7`
+    - Percent Lightweight Material (pcOWL): `B3 isin(2, 5, 6, 8, 10, 11) / nHH`<sup>1</sup>
+        - Wood/Bamboo: `B3==2`
+        - Sawali/Cogon/Nipa: `B3==5`
+        - Asbestos: `B3==6`
+        - Makeshift/Salvaged/Improvised Materials: `B3==8`
+        - Others: `B3==10`
+        - None: `B3==11`
+- Source of Drinking Water Supply (Safe vs. Unsafe, Level III or II):
+    - Percent Safe Source (pcDWS): `H2 isin(1, 2, 3, 4, 5, 11) / nHH`
+        - Percent Level III (pcDW3): `H2 isin(1, 3)`
+            - Own Faucet, Community Water System: `H2==1`
+            - Own Tube/Piped Deep Well: `H2==3`
+        - Percent Level II (pcDW2): `H2 isin(2, 4, 5)`
+            - Shared Faucet, Community Water System: `H2==2`
+            - Shared Tube/Piped Deep Well: `H2==4`
+            - Piped Shallow Well: `H2==5`
+        - Percent Safe Private (*in future*)
+            - Bottled Water: `H2==11` (*currently included on its own*)
+            - Water Refilling Station (*for CPH 2020*)
+    - Percent Unsafe Source (pcDW1): `H2 not isin(1, 2, 3, 4, 5, 11) / nHH`
+        - Dug Well: `H2==6`
+        - Protected Spring: `H2==7`
+        - Unprotected Spring: `H2==8`
+        - Lake/River/Rain: `H2==10`
+        - Others: `H2==12`
+- Source of Cooking Water Supply (same as above)
+    - Percent Safe Source (pcDWS): `H3 isin(1, 2, 3, 4, 5, 11) / nHH`
+        - Percent Level III (pcDW3): `H2 isin(1, 3)`
+        - Percent Level II (pcDW2): `H2 isin(2, 4, 5)`
+        - Percent Safe Private (*in future*)
+    - Percent Unsafe Source (pcDW1): `H3 not isin(1, 2, 3, 4, 5, 11) / nHH`
